@@ -1,14 +1,18 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, Laptop, UserX, Zap } from 'lucide-react';
-import { cn } from '@/lib/cn';
+import { Laptop, UserX, Zap } from 'lucide-react';
 import { useReveal } from '@/hooks/useReveal';
 import { useParallax } from '@/hooks/useParallax';
-import { buttonVariants } from '@/components/ui/button-variants';
 import { ToolSearch } from './ToolSearch';
 
 /**
  * Headline, one sentence, and the search box — the fastest path to the tool the
  * visitor already has in mind. Everything below is for people who do not.
+ *
+ * There is deliberately no "try this tool" button. It used to link to Merge,
+ * and it was the only hardcoded tool link on any surface: nothing is deployed
+ * and there is no usage data, so naming one tool as the one to try was a
+ * ranking we invented. The search above reaches all of them and "Start here"
+ * below offers a bounded selection from the registry — both answer the same
+ * question without picking a favourite.
  */
 export function Hero() {
   const copy = useReveal<HTMLDivElement>();
@@ -53,13 +57,6 @@ export function Hero() {
             Free, no sign-up
           </li>
         </ul>
-
-        <div className="mt-9">
-          <Link to="/tools/pdf-merge" className={cn(buttonVariants({ size: 'lg' }), 'group')}>
-            Try Merge PDF now
-            <ArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" />
-          </Link>
-        </div>
       </div>
     </section>
   );
