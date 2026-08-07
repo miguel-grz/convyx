@@ -15,4 +15,20 @@ export const PDFJS_ASSETS = {
   standardFontDataUrl: `${base}pdfjs/standard_fonts/`,
   cMapUrl: `${base}pdfjs/cmaps/`,
   cMapPacked: true,
+
+  /**
+   * Draw glyph outlines instead of installing the fonts and letting the
+   * browser's text engine do it.
+   *
+   * Installing a font means registering a `FontFace`, which belongs to a
+   * document. We render inside a worker, where there is no document, and the
+   * fallback path is what produced pages of empty boxes. Rasterising the
+   * outlines has no such dependency: whatever the file embeds is what gets
+   * drawn.
+   *
+   * The cost is the browser's hinting, which does not apply to outlines. At the
+   * scales this renders (2× and 3× for anything but a preview) that is not
+   * visible, and correct-but-unhinted beats absent.
+   */
+  disableFontFace: true,
 } as const;
