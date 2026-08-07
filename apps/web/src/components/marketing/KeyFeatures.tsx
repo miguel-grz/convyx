@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Ban, Check, Laptop, MonitorSmartphone, Timer } from 'lucide-react';
+import { Ban, Check, Laptop, MonitorSmartphone, Timer } from 'lucide-react';
 import { CATEGORY_META } from '@convyx/tool-contract';
 import { getActiveCategories, tools } from '@/tools/registry';
 import { cn } from '@/lib/cn';
@@ -220,17 +219,22 @@ function NoInstall() {
   );
 }
 
-/** The catalogue as one number, so the landing page stops growing with it. */
+/**
+ * The catalogue as one number.
+ *
+ * Not a link: "Start here" sits directly below and owns the way into the
+ * catalogue. Two doors to the same room, one screen apart, is a choice the
+ * visitor should not have to make.
+ */
 function CatalogTile({ delay }: { delay: number }) {
-  const reveal = useReveal<HTMLAnchorElement>({ delay });
+  const reveal = useReveal<HTMLDivElement>({ delay });
   const counter = useCountUp<HTMLParagraphElement>(tools.length);
   const categories = getActiveCategories();
 
   return (
-    <Link
+    <div
       ref={reveal}
-      to="/tools"
-      className="group border-line bg-bg-panel hover:border-brand/40 hover:shadow-card flex flex-col justify-between rounded-2xl border p-6 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5"
+      className="border-line bg-bg-panel flex flex-col justify-between rounded-2xl border p-6"
     >
       <div>
         <p ref={counter.ref} className="text-brand text-5xl font-semibold tabular-nums">
@@ -243,30 +247,20 @@ function CatalogTile({ delay }: { delay: number }) {
         </p>
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
-        <div className="flex -space-x-2">
-          {tools
-            .filter((tool) => tool.featured)
-            .slice(0, 4)
-            .map((tool) => (
-              <span
-                key={tool.id}
-                data-category={tool.category}
-                className="cat-tint border-bg-panel flex size-8 items-center justify-center rounded-lg border-2"
-              >
-                <Icon name={tool.icon} className="size-3.5" />
-              </span>
-            ))}
-        </div>
-
-        <span className="text-brand flex items-center gap-1.5 text-sm font-medium">
-          Browse all
-          <ArrowRight
-            className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
-            aria-hidden
-          />
-        </span>
+      <div className="mt-6 flex -space-x-2">
+        {tools
+          .filter((tool) => tool.featured)
+          .slice(0, 4)
+          .map((tool) => (
+            <span
+              key={tool.id}
+              data-category={tool.category}
+              className="cat-tint border-bg-panel flex size-8 items-center justify-center rounded-lg border-2"
+            >
+              <Icon name={tool.icon} className="size-3.5" />
+            </span>
+          ))}
       </div>
-    </Link>
+    </div>
   );
 }

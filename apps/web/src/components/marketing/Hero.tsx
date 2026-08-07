@@ -1,27 +1,16 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Laptop, UserX, Zap } from 'lucide-react';
-import type { tools } from '@/tools/registry';
 import { cn } from '@/lib/cn';
 import { useReveal } from '@/hooks/useReveal';
 import { useParallax } from '@/hooks/useParallax';
 import { buttonVariants } from '@/components/ui/button-variants';
-import { Icon } from '@/components/ui/icon';
 import { ToolSearch } from './ToolSearch';
-
-interface HeroProps {
-  /**
-   * One-click starting points. Planned tools are included and labelled rather
-   * than hidden — with one tool shipped, a row of a single chip would read as a
-   * mistake, and pretending the rest exist would be worse.
-   */
-  quickPicks: typeof tools;
-}
 
 /**
  * Headline, one sentence, and the search box — the fastest path to the tool the
  * visitor already has in mind. Everything below is for people who do not.
  */
-export function Hero({ quickPicks }: HeroProps) {
+export function Hero() {
   const copy = useReveal<HTMLDivElement>();
   const glow = useParallax<HTMLDivElement>({ speed: 40 });
 
@@ -47,29 +36,7 @@ export function Hero({ quickPicks }: HeroProps) {
 
         <ToolSearch className="mx-auto mt-9 max-w-md" />
 
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          {quickPicks.map((tool) => (
-            <Link
-              key={tool.id}
-              to={`/tools/${tool.id}`}
-              data-category={tool.category}
-              className={cn(
-                'group border-line bg-bg-panel hover:border-line-strong hover:bg-bg-raised flex items-center gap-2 rounded-lg border py-1.5 pr-3 pl-2 text-sm font-medium transition-colors duration-150',
-                tool.status === 'planned' && 'text-fg-muted',
-              )}
-            >
-              <span className="cat-tint flex size-6 items-center justify-center rounded">
-                <Icon name={tool.icon} className="size-3.5" />
-              </span>
-              {tool.name}
-              {tool.status === 'planned' && (
-                <span className="text-fg-subtle text-xs font-normal">soon</span>
-              )}
-            </Link>
-          ))}
-        </div>
-
-        <ul className="text-fg-muted mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm">
+        <ul className="text-fg-muted mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm">
           <li className="flex items-center gap-2">
             <Laptop className="text-ok size-4" aria-hidden />
             Your files stay private
