@@ -131,5 +131,7 @@ The catalogue grid on `/tools` is 1 / 2 / 3 / 4 columns at `sm` / `lg` / `xl`.
 2. `--brand` is for the primary action and focus. Category hues are for icon
    tiles and active tabs. Neither is decorative.
 3. Buttons say what they do, in sentence case.
-4. Any surface listing tools reads the registry; nothing is hardcoded.
-5. Animation may never be the reason content is invisible.
+4. Marketing copy names the result, never the mechanism. "Your files stay on
+   your computer", not "15 tools run client-side in a Web Worker".
+5. Any surface listing tools reads the registry; nothing is hardcoded.
+6. Animation may never be the reason content is invisible.

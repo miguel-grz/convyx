@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Ban, Gauge, Laptop, Timer } from 'lucide-react';
+import { ArrowRight, Ban, Check, Laptop, MonitorSmartphone, Timer } from 'lucide-react';
 import { CATEGORY_META } from '@convyx/tool-contract';
 import { getActiveCategories, tools } from '@/tools/registry';
 import { cn } from '@/lib/cn';
@@ -16,6 +16,13 @@ import { Icon } from '@/components/ui/icon';
  * the catalogue and pushed everything that explains the product below the fold.
  * Five claims do not grow; 26 cards become 60.
  *
+ * The copy here is written for someone who arrived with a broken file, not for
+ * someone evaluating the build. No servers, no workers, no uploads — those words
+ * describe our problem, not theirs.Each claim is a result they can feel: it is
+ * private, it is instant, it is free, there is nothing to install. The
+ * mechanism is documented for the people who want it, in the README, the ADRs
+ * and the privacy page.
+ *
  * The tiles are deliberately different sizes and each carries its own small
  * animation, because a row of identical icon-heading-text cards is the layout
  * this section exists to avoid.
@@ -27,10 +34,10 @@ export function KeyFeatures() {
     <section id="features" className="border-line border-b">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl text-balance sm:text-4xl">Built to be the boring choice</h2>
+          <h2 className="text-3xl text-balance sm:text-4xl">Private, instant, and free</h2>
           <p className="text-fg-muted mt-4 text-pretty">
-            No sign-up wall, no upload you did not ask for, and no tab frozen for thirty seconds.
-            Open a tool, get the file, close the tab.
+            No account to create, no waiting around, and no watermark stamped on your file. Pick a
+            tool, drop your file in, done.
           </p>
         </div>
 
@@ -39,33 +46,33 @@ export function KeyFeatures() {
             className="lg:col-span-2"
             delay={0}
             icon={Laptop}
-            title={`${local} of ${tools.length} tools never upload anything`}
-            body="Merging, splitting and converting happen inside this tab, on your own machine. There is no file on a server to retain, log or leak — not as a policy, but because it never arrives."
+            title="Your files stay on your computer"
+            body={`Most of what we do happens right here on your screen — ${local} of our ${tools.length} tools never send your file anywhere. That keeps it private, and it means your result is ready the moment you click.`}
             visual={<DeviceBoundary />}
           />
 
           <Tile
             delay={90}
             icon={Ban}
-            title="Nothing asked of you"
-            body="No account, no email, no watermark on the way out, and no tool held back behind a plan."
+            title="Free, and nothing to sign up for"
+            body="No account, no email, no card. Every tool is free, and your file comes back without a watermark on it."
             visual={<NothingAsked />}
           />
 
           <Tile
             delay={180}
             icon={Timer}
-            title="Deleted within the hour"
-            body="When a job genuinely needs a server, a scheduled sweep removes the file — usually the moment you download it."
+            title="We never keep your files"
+            body="A few tools need a hand from us to do the heavy lifting. Those files are wiped within the hour, automatically — usually the second you download the result."
             visual={<RetentionRing />}
           />
 
           <Tile
             delay={270}
-            icon={Gauge}
-            title="The tab never freezes"
-            body="Heavy work runs off the main thread, with real progress and a cancel button that actually stops the job mid-run."
-            visual={<WorkerProgress />}
+            icon={MonitorSmartphone}
+            title="Nothing to install"
+            body="It works in the browser you already have, on a laptop or a phone. No download, no plugin, no setup."
+            visual={<NoInstall />}
           />
 
           <CatalogTile delay={360} />
@@ -115,9 +122,10 @@ function Tile({ icon: IconComponent, title, body, visual, delay, className }: Ti
 function DeviceBoundary() {
   return (
     <div className="bg-bg-inset relative h-32 overflow-hidden rounded-xl px-4 pt-5" aria-hidden>
-      <p className="text-fg-subtle absolute top-3 right-4 text-[0.625rem]">
-        your device ends here
-      </p>
+      <div className="text-fg-subtle absolute inset-x-4 top-3 flex justify-between text-[0.625rem]">
+        <span>your computer</span>
+        <span>the internet</span>
+      </div>
 
       <div className="flex h-[calc(100%-1.25rem)] items-center gap-3">
         {/* The track defines the travel: the file animates to its far edge, so
@@ -133,7 +141,7 @@ function DeviceBoundary() {
 
         <div className="text-fg-subtle flex shrink-0 flex-col items-center gap-1 opacity-40">
           <span className="border-line-strong size-8 rounded-md border border-dashed" />
-          <span className="text-[0.625rem]">server</span>
+          <span className="text-[0.625rem]">never sent</span>
         </div>
       </div>
     </div>
@@ -144,7 +152,7 @@ function DeviceBoundary() {
 function NothingAsked() {
   return (
     <ul className="bg-bg-inset space-y-2 rounded-xl p-4" aria-hidden>
-      {['Email address', 'Payment details', 'Watermark on export'].map((item) => (
+      {['Create an account', 'Add a card', 'Watermark on your file'].map((item) => (
         <li key={item} className="text-fg-subtle flex items-center gap-2.5 text-xs">
           <span className="bg-line-strong h-px w-4" />
           <span className="line-through decoration-1">{item}</span>
@@ -184,20 +192,30 @@ function RetentionRing() {
   );
 }
 
-/** A worker running, with the control that stops it. */
-function WorkerProgress() {
+/** The browser they already have, with nothing added to it. */
+function NoInstall() {
   return (
     <div className="bg-bg-inset space-y-3 rounded-xl p-4" aria-hidden>
-      <div className="text-fg-subtle flex items-center justify-between text-xs">
-        <span>Merging 12 pages…</span>
-        <span className="border-line-strong rounded border px-1.5 py-0.5 text-[0.625rem]">
-          Cancel
-        </span>
+      <div className="border-line bg-bg-panel overflow-hidden rounded-lg border">
+        <div className="border-line flex items-center gap-1.5 border-b px-2.5 py-2">
+          <span className="bg-line-strong size-1.5 rounded-full" />
+          <span className="bg-line-strong size-1.5 rounded-full" />
+          <span className="bg-line-strong size-1.5 rounded-full" />
+          <span className="bg-bg-raised text-fg-subtle ml-1.5 flex-1 truncate rounded px-2 py-0.5 text-[0.625rem]">
+            convyx.app
+          </span>
+        </div>
+        <p className="text-fg-muted px-3 py-3 text-xs">Open the page. That is the install.</p>
       </div>
-      <div className="bg-bg-raised relative h-1.5 overflow-hidden rounded-full">
-        <span className="bg-brand motion-safe:animate-[indeterminate_1.6s_ease-in-out_infinite] absolute inset-y-0 w-1/3 rounded-full" />
-      </div>
-      <p className="text-fg-subtle text-[0.625rem]">Web Worker · main thread idle</p>
+
+      <ul className="text-fg-subtle flex flex-wrap gap-x-4 gap-y-1 text-[0.625rem]">
+        {['Laptop', 'Phone', 'Tablet'].map((device) => (
+          <li key={device} className="flex items-center gap-1">
+            <Check className="text-ok size-3" />
+            {device}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

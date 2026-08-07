@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Laptop, Trash2, UserX } from 'lucide-react';
-import { tools } from '@/tools/registry';
+import { ArrowRight, Laptop, UserX, Zap } from 'lucide-react';
+import type { tools } from '@/tools/registry';
 import { cn } from '@/lib/cn';
 import { useReveal } from '@/hooks/useReveal';
 import { useParallax } from '@/hooks/useParallax';
@@ -25,8 +25,6 @@ export function Hero({ quickPicks }: HeroProps) {
   const copy = useReveal<HTMLDivElement>();
   const glow = useParallax<HTMLDivElement>({ speed: 40 });
 
-  const local = tools.filter((tool) => tool.processing === 'client').length;
-
   return (
     <section className="border-line relative overflow-hidden border-b">
       {/* A single soft light source behind the headline. It drifts on scroll —
@@ -43,8 +41,8 @@ export function Hero({ quickPicks }: HeroProps) {
         </h1>
 
         <p className="text-fg-muted mx-auto mt-5 max-w-xl text-lg text-pretty">
-          Merge, split, convert and compress in seconds. No account, no watermarks — and {local} of
-          our {tools.length} tools never upload your file at all.
+          Merge, split, convert and compress in seconds — free, with no account. Most tools work
+          right on your screen, so your files stay yours.
         </p>
 
         <ToolSearch className="mx-auto mt-9 max-w-md" />
@@ -74,15 +72,15 @@ export function Hero({ quickPicks }: HeroProps) {
         <ul className="text-fg-muted mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm">
           <li className="flex items-center gap-2">
             <Laptop className="text-ok size-4" aria-hidden />
-            Runs in your browser
+            Your files stay private
           </li>
           <li className="flex items-center gap-2">
-            <Trash2 className="text-ok size-4" aria-hidden />
-            Server files deleted in 1 hour
+            <Zap className="text-ok size-4" aria-hidden />
+            Ready in seconds
           </li>
           <li className="flex items-center gap-2">
             <UserX className="text-ok size-4" aria-hidden />
-            No sign-up
+            Free, no sign-up
           </li>
         </ul>
 

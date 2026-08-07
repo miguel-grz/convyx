@@ -35,9 +35,9 @@ export function TryItNow() {
           </h2>
 
           <p className="text-fg-muted mt-5 max-w-md text-pretty">
-            This is the real {tool.name} tool, not a picture of one. Drop two PDFs in and watch your
-            browser's network tab stay completely empty — the file is read, merged and written back
-            on your own machine.
+            This is the real {tool.name} tool, not a screenshot of one. Drop two PDFs in and you
+            will have the merged file before you have finished reading this sentence — no upload,
+            no waiting, nothing to sign.
           </p>
 
           <Link

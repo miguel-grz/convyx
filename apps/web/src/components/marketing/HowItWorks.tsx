@@ -5,17 +5,17 @@ const STEPS = [
   {
     icon: MousePointerClick,
     title: 'Pick a tool',
-    body: 'Search or browse by category. Each tool tells you what it accepts and how big a file it takes before you choose one.',
+    body: 'Search for what you need or browse the list. Each tool tells you which files it takes, and how large, before you pick one.',
   },
   {
     icon: Upload,
     title: 'Add your file',
-    body: 'Drag it in or click to browse. For most tools the file is read straight off your disk and never sent anywhere.',
+    body: 'Drag it into the box or click to pick it. For most tools your file never leaves your computer, so there is no upload to sit through.',
   },
   {
     icon: Download,
     title: 'Download the result',
-    body: 'You get the finished file immediately. Nothing is stored, and there is no watermark on the way out.',
+    body: 'The finished file is yours straight away — no watermark, no email required, and nothing kept afterwards.',
   },
 ];
 

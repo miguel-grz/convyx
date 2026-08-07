@@ -99,6 +99,11 @@ an app for something else). Motion and scroll animation stay.
 4. **The catalog is the product.** Growth is more tools, not more features per
    tool, so every surface must stay correct as the count multiplies.
 5. **No account, ever, for the core catalog.** Nothing is gated behind identity.
+6. **Write for the person holding the file, not the person reading the code.**
+   Product surfaces state results — private, instant, free, nothing to install.
+   They never explain the mechanism: no servers, uploads, workers, threads,
+   sweeps or network tabs. That vocabulary belongs to the secondary audience and
+   lives where they look — README, `docs/adr`, and the privacy page.
 
 ## Accessibility & Inclusion
 

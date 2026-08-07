@@ -3,8 +3,9 @@ import { Accordion } from '@/components/ui/accordion';
 
 /**
  * The questions someone actually asks before dropping a private document into a
- * website they found five seconds ago. Answers are specific, including the
- * uncomfortable one about how much of the catalog is finished.
+ * website they found five seconds ago — answered in their words, not ours.
+ * Specific throughout, including the uncomfortable one about how little of the
+ * catalogue is finished.
  */
 export function Faq() {
   const local = tools.filter((tool) => tool.processing === 'client').length;
@@ -12,28 +13,32 @@ export function Faq() {
 
   const questions = [
     {
-      q: 'Do you upload my files?',
-      a: `Not for ${local} of our ${tools.length} tools. Those run entirely in your browser — you can watch the network tab stay empty while a merge completes. The remaining tools need software a browser cannot run, so for those the file is sent over HTTPS and deleted within an hour.`,
+      q: 'Are my files private?',
+      a: `Yes. For ${local} of our ${tools.length} tools your file never leaves your computer — we never receive it, so there is nothing we could look at, share or lose. The rest need a hand from us to do the heavy lifting, and those are wiped within the hour.`,
     },
     {
-      q: 'How long do you keep the files that do get uploaded?',
-      a: 'One hour at the outside, and usually only until you download the result. Deletion runs on a schedule rather than depending on anyone remembering to trigger it.',
+      q: 'How long do you keep my files?',
+      a: 'The ones we never receive, not at all. The ones we do handle are deleted within the hour, and usually the moment you download your result. It happens automatically, not because someone remembers to do it.',
     },
     {
-      q: 'Do I need an account?',
-      a: 'No. There is no sign-up, no email, and nothing in the catalog is held back behind a plan.',
+      q: 'Is it really free?',
+      a: 'Yes, and there is no account, no email and no card. Nothing is held back behind a plan.',
     },
     {
-      q: 'Will the output have a watermark?',
-      a: 'No. What you download is the file you asked for.',
+      q: 'Will there be a watermark on my file?',
+      a: 'No. What you download is the file you asked for, and nothing else.',
     },
     {
-      q: 'How many tools actually work today?',
-      a: `${available.length} of ${tools.length}: ${available.map((tool) => tool.name).join(', ')}. The rest are listed with a “Soon” badge because we would rather show the roadmap than pretend the catalog is finished.`,
+      q: 'Which tools work right now?',
+      a: `${available.length} of ${tools.length}: ${available.map((tool) => tool.name).join(', ')}. The rest are marked "Soon" — we would rather show you what is coming than pretend it is ready.`,
     },
     {
-      q: 'Is there a file size limit?',
-      a: 'Yes, and it differs per tool — between 25 MB and 200 MB. Every tool shows its own limit before you pick a file, not after the upload fails.',
+      q: 'How big a file can I use?',
+      a: 'It depends on the tool — between 25 MB and 200 MB. Each one shows its own limit before you pick a file, so you never find out the hard way.',
+    },
+    {
+      q: 'Do I need to install anything?',
+      a: 'No. It runs in the browser you are reading this in, on a laptop, a phone or a tablet.',
     },
   ];
 
