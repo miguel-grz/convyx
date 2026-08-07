@@ -2,7 +2,7 @@ import { tools } from '@/tools/registry';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { Hero } from '@/components/marketing/Hero';
 import { KeyFeatures } from '@/components/marketing/KeyFeatures';
-import { TryItNow } from '@/components/marketing/TryItNow';
+import { UseCases } from '@/components/marketing/UseCases';
 import { HowItWorks } from '@/components/marketing/HowItWorks';
 import { PrivacyStrip } from '@/components/marketing/PrivacyStrip';
 import { Faq } from '@/components/marketing/Faq';
@@ -31,7 +31,7 @@ export function HomePage() {
     <>
       <Hero quickPicks={quickPicks} />
       <KeyFeatures />
-      <TryItNow />
+      <UseCases />
       <HowItWorks />
       <PrivacyStrip />
       <Faq />

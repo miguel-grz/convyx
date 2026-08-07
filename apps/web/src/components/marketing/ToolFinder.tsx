@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Search, X } from 'lucide-react';
-import { CATEGORY_META, type ToolCategory } from '@convyx/tool-contract';
+import { CATEGORY_META, type ToolCategory, type ToolManifest } from '@convyx/tool-contract';
 import { getActiveCategories, searchTools } from '@/tools/registry';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
@@ -20,8 +20,8 @@ interface ToolFinderProps {
  * Search plus category tabs over the tool grid — the part of the page people
  * actually came for.
  *
- * Filtering is instant and local because the whole catalog is already in memory
- * as manifests; there is no request to debounce and no spinner to show.
+ * Filtering is instant and local because the whole catalogue is already in
+ * memory as manifests; there is no request to debounce and no spinner to show.
  */
 export function ToolFinder({
   query,
@@ -36,6 +36,15 @@ export function ToolFinder({
     const matches = searchTools(query);
     return category ? matches.filter((tool) => tool.category === category) : matches;
   }, [query, category]);
+
+  /**
+   * With "All" selected the registry's alphabetical order interleaves the
+   * categories — Compress image between Compress PDF and Convert image — which
+   * reads as an unsorted pile. Grouping restores the structure without hiding
+   * anything behind a default tab. A search or a chosen category is already
+   * narrow, so those stay a single flat grid.
+   */
+  const grouped = !category && !query.trim();
 
   return (
     <div className={className}>
@@ -88,18 +97,7 @@ export function ToolFinder({
         </div>
       </div>
 
-      <p aria-live="polite" className="text-fg-muted mt-5 text-sm">
-        {results.length} {results.length === 1 ? 'tool' : 'tools'}
-        {query && ` matching “${query}”`}
-      </p>
-
-      {results.length > 0 ? (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {results.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
-          ))}
-        </div>
-      ) : (
+      {results.length === 0 ? (
         <EmptyState
           title={`No tool matches “${query}”`}
           description="Try the file format instead of the task — searching “pdf” or “webp” finds more than a verb does."
@@ -109,7 +107,60 @@ export function ToolFinder({
             </Button>
           }
         />
+      ) : grouped ? (
+        <div className="mt-10 space-y-12">
+          {categories.map((entry) => {
+            const inCategory = order(results.filter((tool) => tool.category === entry.id));
+            if (inCategory.length === 0) return null;
+
+            return (
+              <section key={entry.id} aria-labelledby={`group-${entry.id}`}>
+                <div
+                  data-category={entry.id}
+                  className="border-line flex items-center gap-3 border-b pb-3"
+                >
+                  <span className="cat-tint flex size-8 items-center justify-center rounded-lg">
+                    <Icon name={CATEGORY_META[entry.id].icon} className="size-4" />
+                  </span>
+                  <h3 id={`group-${entry.id}`} className="text-lg">
+                    {CATEGORY_META[entry.id].label}
+                  </h3>
+                  <span className="text-fg-subtle text-sm">{inCategory.length}</span>
+                </div>
+
+                <Grid tools={inCategory} className="mt-5" />
+              </section>
+            );
+          })}
+        </div>
+      ) : (
+        <>
+          <p aria-live="polite" className="text-fg-muted mt-5 text-sm">
+            {results.length} {results.length === 1 ? 'tool' : 'tools'}
+            {query && ` matching “${query}”`}
+          </p>
+          <Grid tools={order(results)} className="mt-4" />
+        </>
       )}
+    </div>
+  );
+}
+
+/** Working tools first, then alphabetical — what you can use should be findable. */
+function order(tools: ToolManifest[]): ToolManifest[] {
+  return [...tools].sort(
+    (a, b) =>
+      Number(b.status === 'available') - Number(a.status === 'available') ||
+      a.name.localeCompare(b.name),
+  );
+}
+
+function Grid({ tools, className }: { tools: ToolManifest[]; className?: string }) {
+  return (
+    <div className={cn('grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4', className)}>
+      {tools.map((tool) => (
+        <ToolCard key={tool.id} tool={tool} />
+      ))}
     </div>
   );
 }
