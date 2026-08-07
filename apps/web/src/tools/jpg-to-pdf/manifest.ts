@@ -12,7 +12,7 @@ const manifest: ToolManifest = {
   icon: 'file-image',
   keywords: ['image to pdf', 'png', 'photo', 'imagen a pdf'],
   processing: 'client',
-  status: 'planned',
+  status: 'available',
   accepts: ACCEPTS.image,
   files: { min: 1, max: null },
   maxFileSizeMB: 100,
