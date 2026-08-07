@@ -49,7 +49,7 @@ export interface EncodeOptions {
 export async function encodeImage(
   bitmap: ImageBitmap,
   { format, quality, width, height }: EncodeOptions,
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
   const canvas = createCanvas(width ?? bitmap.width, height ?? bitmap.height);
   const context = canvas.getContext('2d');
 

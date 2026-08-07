@@ -227,6 +227,12 @@ export interface ToolRunInput<TOptions = Record<string, never>> {
 export interface ToolRunOutput {
   blob: Blob;
   filename: string;
+  /**
+   * One line shown with the result, for something the person needs to know
+   * about what they got — "two of these were already as small as they can
+   * get". Only set it when there is something to say.
+   */
+  note?: string;
 }
 
 export type ToolHandler<TOptions = Record<string, never>> = (

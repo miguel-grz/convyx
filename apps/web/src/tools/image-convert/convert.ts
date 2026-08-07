@@ -1,6 +1,6 @@
 import { ToolError, type ProgressReporter } from '@convyx/tool-contract';
 import { stripExtension } from '@/lib/format';
-import { safeEntryName, zipEntries } from '@/lib/zip';
+import { uniqueEntryName, zipEntries } from '@/lib/zip';
 import type { RasterFormat } from '@/lib/image/formats';
 
 export interface SourceImage {
@@ -50,7 +50,7 @@ export async function convertImages(
     report(index / images.length, `Converting ${image.name}`);
 
     converted.push({
-      entry: uniqueName(taken, safeEntryName(`${stripExtension(image.name)}.${format}`)),
+      entry: uniqueEntryName(taken, `${stripExtension(image.name)}.${format}`),
       bytes: await encode(image),
     });
   }
@@ -67,26 +67,4 @@ export async function convertImages(
     kind: 'zip',
     imageCount: converted.length,
   };
-}
-
-/**
- * Converting `logo.png` and `logo.jpg` in one go would produce two `logo.webp`
- * entries, and the second would quietly replace the first inside the zip. The
- * suffix keeps both, and keeps them recognisable.
- */
-function uniqueName(taken: Set<string>, name: string): string {
-  const dot = name.lastIndexOf('.');
-  const stem = dot > 0 ? name.slice(0, dot) : name;
-  const extension = dot > 0 ? name.slice(dot) : '';
-
-  let candidate = name;
-  let counter = 2;
-
-  while (taken.has(candidate)) {
-    candidate = `${stem}-${counter}${extension}`;
-    counter += 1;
-  }
-
-  taken.add(candidate);
-  return candidate;
 }

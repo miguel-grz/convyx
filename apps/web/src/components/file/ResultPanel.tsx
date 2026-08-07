@@ -29,6 +29,8 @@ export function ResultPanel({ manifest, result, inputBytes, onReset }: ResultPan
         )}
       </p>
 
+      {result.note && <p className="text-fg-subtle mx-auto mt-2 max-w-sm text-xs">{result.note}</p>}
+
       <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
         <Button size="lg" onClick={() => downloadBlob(result.blob, result.filename)}>
           <Download />
