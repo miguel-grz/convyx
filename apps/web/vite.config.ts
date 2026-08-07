@@ -3,9 +3,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { convyxIcons } from './vite/icons-plugin';
+import { convyxPdfjsAssets } from './vite/pdfjs-assets-plugin';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), convyxIcons()],
+  plugins: [react(), tailwindcss(), convyxIcons(), convyxPdfjsAssets()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

@@ -1,6 +1,7 @@
 import * as pdfjs from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { ToolError } from '@convyx/tool-contract';
+import { PDFJS_ASSETS } from '@/lib/pdf/pdfjsAssets';
 import { expose } from '@/workers/expose';
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
@@ -40,7 +41,7 @@ expose<ThumbnailsPayload, ThumbnailsResult>(
       });
     }
 
-    const task = pdfjs.getDocument({ data: new Uint8Array(bytes) });
+    const task = pdfjs.getDocument({ data: new Uint8Array(bytes), ...PDFJS_ASSETS });
 
     let document;
     try {

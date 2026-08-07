@@ -1,6 +1,7 @@
 import * as pdfjs from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { ToolError } from '@convyx/tool-contract';
+import { PDFJS_ASSETS } from '@/lib/pdf/pdfjsAssets';
 import type { PageRenderer } from './convert';
 
 // pdf.js parses and rasterises in a worker of its own. We are already inside
@@ -36,7 +37,7 @@ export async function openForRender(
 
   // The loading task owns the pdf.js worker; the document proxy does not. Only
   // the task can shut it down, so it has to outlive the await.
-  const task = pdfjs.getDocument({ data: new Uint8Array(bytes) });
+  const task = pdfjs.getDocument({ data: new Uint8Array(bytes), ...PDFJS_ASSETS });
 
   let document;
   try {
