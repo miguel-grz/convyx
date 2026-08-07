@@ -65,7 +65,15 @@ export async function encodeImage(
     context.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = 'high';
+  context.drawImage(
+    halveDownTo(bitmap, canvas.width, canvas.height),
+    0,
+    0,
+    canvas.width,
+    canvas.height,
+  );
 
   const mimeType = FORMAT_MIME[format];
   const blob = await canvas.convertToBlob({ type: mimeType, quality });
@@ -128,6 +136,41 @@ export async function requireEncoder(format: RasterFormat): Promise<void> {
   if (!(await canEncode(format))) {
     throw unsupportedFormat(format);
   }
+}
+
+/**
+ * Shrinks in halving steps until one more would overshoot.
+ *
+ * A canvas samples a small neighbourhood, so scaling a 4000px image to 400px in
+ * one draw throws away nine of every ten pixels without ever looking at them —
+ * the result is the mush you see on sites that resize this way. Halving reads
+ * every pixel on the way down. Anything above half size is left alone, because
+ * a single draw is already reading enough of the source to be right.
+ */
+function halveDownTo(
+  bitmap: ImageBitmap,
+  width: number,
+  height: number,
+): ImageBitmap | OffscreenCanvas {
+  let current: ImageBitmap | OffscreenCanvas = bitmap;
+  let currentWidth = bitmap.width;
+  let currentHeight = bitmap.height;
+
+  while (currentWidth / 2 > width && currentHeight / 2 > height) {
+    currentWidth = Math.max(Math.round(currentWidth / 2), width);
+    currentHeight = Math.max(Math.round(currentHeight / 2), height);
+
+    const step = createCanvas(currentWidth, currentHeight);
+    const context = step.getContext('2d');
+    if (!context) return current;
+
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
+    context.drawImage(current, 0, 0, currentWidth, currentHeight);
+    current = step;
+  }
+
+  return current;
 }
 
 function createCanvas(width: number, height: number): OffscreenCanvas {
