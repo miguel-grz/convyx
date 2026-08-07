@@ -13,8 +13,6 @@ interface ToolFinderProps {
   onQueryChange: (query: string) => void;
   category: ToolCategory | null;
   onCategoryChange: (category: ToolCategory | null) => void;
-  /** Off when something above already owns the search field, as the hero does. */
-  showSearch?: boolean;
   className?: string;
 }
 
@@ -30,7 +28,6 @@ export function ToolFinder({
   onQueryChange,
   category,
   onCategoryChange,
-  showSearch = true,
   className,
 }: ToolFinderProps) {
   const categories = getActiveCategories();
@@ -64,7 +61,6 @@ export function ToolFinder({
           ))}
         </div>
 
-        {showSearch && (
         <div className="relative sm:w-64">
           <Search
             className="text-fg-subtle pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
@@ -90,7 +86,6 @@ export function ToolFinder({
             </Button>
           )}
         </div>
-        )}
       </div>
 
       <p aria-live="polite" className="text-fg-muted mt-5 text-sm">

@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Laptop, Search, Trash2, UserX } from 'lucide-react';
+import { ArrowRight, Laptop, Trash2, UserX } from 'lucide-react';
 import { tools } from '@/tools/registry';
 import { cn } from '@/lib/cn';
 import { useReveal } from '@/hooks/useReveal';
 import { useParallax } from '@/hooks/useParallax';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { Icon } from '@/components/ui/icon';
+import { ToolSearch } from './ToolSearch';
 
 interface HeroProps {
-  query: string;
-  onQueryChange: (query: string) => void;
   /**
    * One-click starting points. Planned tools are included and labelled rather
    * than hidden — with one tool shipped, a row of a single chip would read as a
@@ -22,11 +21,11 @@ interface HeroProps {
  * Headline, one sentence, and the search box — the fastest path to the tool the
  * visitor already has in mind. Everything below is for people who do not.
  */
-export function Hero({ query, onQueryChange, quickPicks }: HeroProps) {
+export function Hero({ quickPicks }: HeroProps) {
   const copy = useReveal<HTMLDivElement>();
   const glow = useParallax<HTMLDivElement>({ speed: 40 });
 
-  const orbit = tools.filter((tool) => tool.processing === 'client').length;
+  const local = tools.filter((tool) => tool.processing === 'client').length;
 
   return (
     <section className="border-line relative overflow-hidden border-b">
@@ -44,24 +43,11 @@ export function Hero({ query, onQueryChange, quickPicks }: HeroProps) {
         </h1>
 
         <p className="text-fg-muted mx-auto mt-5 max-w-xl text-lg text-pretty">
-          Merge, split, convert and compress in seconds. No account, no watermarks — and{' '}
-          {orbit} of our {tools.length} tools never upload your file at all.
+          Merge, split, convert and compress in seconds. No account, no watermarks — and {local} of
+          our {tools.length} tools never upload your file at all.
         </p>
 
-        <div className="relative mx-auto mt-9 max-w-md">
-          <Search
-            className="text-fg-subtle pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2"
-            aria-hidden
-          />
-          <input
-            type="search"
-            value={query}
-            aria-label="Search tools"
-            placeholder="What do you need to do?"
-            onChange={(event) => onQueryChange(event.target.value)}
-            className="border-line-strong bg-bg-panel placeholder:text-fg-subtle focus:border-brand shadow-card h-14 w-full rounded-xl border pr-4 pl-12 text-base transition-colors duration-150"
-          />
-        </div>
+        <ToolSearch className="mx-auto mt-9 max-w-md" />
 
         <div className="mt-5 flex flex-wrap justify-center gap-2">
           {quickPicks.map((tool) => (
@@ -101,10 +87,7 @@ export function Hero({ query, onQueryChange, quickPicks }: HeroProps) {
         </ul>
 
         <div className="mt-9">
-          <Link
-            to="/tools/pdf-merge"
-            className={cn(buttonVariants({ size: 'lg' }), 'group')}
-          >
+          <Link to="/tools/pdf-merge" className={cn(buttonVariants({ size: 'lg' }), 'group')}>
             Try Merge PDF now
             <ArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>

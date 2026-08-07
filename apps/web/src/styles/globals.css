@@ -284,6 +284,54 @@
   }
 }
 
+/* Key-feature tiles. Each animation illustrates the claim beside it rather than
+   decorating it, so none of them run without a sentence to explain. */
+
+/* A file leaves for the server, meets the edge of the device, and comes back.
+   Offsets are a percentage of the track so the file lands on the boundary at
+   every width, which a fixed pixel travel cannot do. */
+@keyframes file-returns {
+  0%,
+  8% {
+    left: 0;
+  }
+  38% {
+    left: calc(100% - 7rem);
+  }
+  46% {
+    left: calc(100% - 7.5rem);
+  }
+  76%,
+  100% {
+    left: 0;
+  }
+}
+
+/* The boundary lights up exactly when the file reaches it. */
+@keyframes barrier-hit {
+  0%,
+  32% {
+    opacity: 0.35;
+  }
+  40% {
+    opacity: 1;
+  }
+  60%,
+  100% {
+    opacity: 0.35;
+  }
+}
+
+/* The retention window emptying: a ring that unwinds to nothing. */
+@keyframes ring-empties {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: var(--ring-length, 164);
+  }
+}
+
 @keyframes drift {
   0%,
   100% {

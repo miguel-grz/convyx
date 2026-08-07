@@ -96,7 +96,10 @@ One idea, applied consistently: content settles upward as it enters the viewport
   motion. Used once, on the hero's light source.
 - Interactive transitions are 150ms; reveals are 700ms on an exponential
   ease-out. Menus use a 160ms `pop-in`.
-- Every animation is suppressed under `prefers-reduced-motion: reduce`.
+- Looping tile animations are gated on `motion-safe:` and every transition is
+  suppressed under `prefers-reduced-motion: reduce`.
+- `useCountUp` starts at the target value and only counts up once observed, so a
+  visitor who never triggers it reads the real number rather than a stuck zero.
 
 ## Browser surfaces
 
@@ -107,8 +110,20 @@ element.
 ## Layout
 
 `max-w-6xl` with `px-4 sm:px-6`; tool pages narrow to `max-w-3xl`. Sections are
-separated by a full-bleed `border-line` rule rather than by spacing alone. The
-tool grid is 1 / 2 / 3 / 4 columns at `sm` / `lg` / `xl`.
+separated by a full-bleed `border-line` rule rather than by spacing alone.
+
+**The landing page carries no tool grid.** A grid of every tool belongs on
+`/tools`, where finding one is the job; on the landing page it grew with the
+catalogue and pushed the explanation below the fold. The way in from the home
+page is the hero's combobox, four quick picks, and the header's category menus.
+
+`KeyFeatures` is a five-tile bento (`lg:grid-cols-3`, first tile spanning two)
+rather than a row of equal cards, and each tile carries a small animation that
+*illustrates* its claim: a file bouncing off the edge of the device, a retention
+ring unwinding, a worker's progress bar with its cancel control, a count-up of
+the catalogue size. Five claims stay five as the catalogue grows.
+
+The catalogue grid on `/tools` is 1 / 2 / 3 / 4 columns at `sm` / `lg` / `xl`.
 
 ## Rules
 
