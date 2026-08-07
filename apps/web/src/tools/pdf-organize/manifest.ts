@@ -12,7 +12,7 @@ const manifest: ToolManifest = {
   icon: 'layout-grid',
   keywords: ['reorder', 'delete pages', 'sort', 'organizar'],
   processing: 'client',
-  status: 'planned',
+  status: 'available',
   accepts: ACCEPTS.pdf,
   files: { min: 1, max: 1 },
   maxFileSizeMB: 100,

@@ -6,9 +6,9 @@ Merge, split, convert and compress PDFs and images. Most tools never upload
 anything — the file is read, transformed and written back inside your browser.
 The ones that genuinely need a server delete the file within the hour.
 
-> **Status:** phase 0 complete. The architecture, the design system and one
-> end-to-end tool (Merge PDF) are done; the other 25 tools are in the catalog as
-> `planned` and ship in phases 1–5. See [the roadmap](#roadmap).
+> **Status:** phases 0 and 1 complete. Seven PDF tools work end to end, all of
+> them entirely in the browser. The remaining 19 are in the catalogue as
+> `planned` and ship in phases 2–5. See [the roadmap](#roadmap).
 
 ## Why this exists
 
@@ -88,8 +88,8 @@ docs/
 | Phase | Scope                                                              | Status |
 | ----- | ------------------------------------------------------------------ | ------ |
 | 0     | Registry, contract, shell, design system, shared upload/run/result | Done   |
-| 1     | Client PDF tools — split, rotate, organize, extract, PDF↔JPG       | Next   |
-| 2     | Client image tools — convert, compress, resize, crop, rotate       |        |
+| 1     | Client PDF tools — split, rotate, organize, extract, PDF↔JPG       | Done   |
+| 2     | Client image tools — convert, compress, resize, crop, rotate       | Next   |
 | 3     | FastAPI, temporary storage with enforced TTL, async job queue      |        |
 | 4     | Server PDF tools — OCR, Office conversion, Ghostscript, passwords  |        |
 | 5     | Server image tools — vectorize, remove background                  |        |
