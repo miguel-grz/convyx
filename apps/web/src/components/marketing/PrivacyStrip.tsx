@@ -121,9 +121,7 @@ function Side({
             {tool.name}
           </li>
         ))}
-        {rest > 0 && (
-          <li className="text-fg-subtle px-1 py-1 text-xs">and {rest} more</li>
-        )}
+        {rest > 0 && <li className="text-fg-subtle px-1 py-1 text-xs">and {rest} more</li>}
       </ul>
     </div>
   );

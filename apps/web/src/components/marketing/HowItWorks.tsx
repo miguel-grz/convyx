@@ -48,9 +48,7 @@ function Step({ step, index }: { step: (typeof STEPS)[number]; index: number }) 
         <IconComponent className="size-5" aria-hidden />
       </span>
 
-      <p className="text-fg-subtle mt-5 text-sm font-medium tabular-nums">
-        Step {index + 1}
-      </p>
+      <p className="text-fg-subtle mt-5 text-sm font-medium tabular-nums">Step {index + 1}</p>
       <h3 className="mt-1 text-lg">{step.title}</h3>
       <p className="text-fg-muted mx-auto mt-2 max-w-xs text-sm text-pretty md:mx-0">{step.body}</p>
     </li>

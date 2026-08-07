@@ -18,10 +18,7 @@ const RESOLVED_ID = `\0${VIRTUAL_ID}`;
  * contains only what is referenced.
  */
 export function convyxIcons(): Plugin {
-  const roots = [
-    'src/tools/*/manifest.ts',
-    '../../packages/tool-contract/src/index.ts',
-  ];
+  const roots = ['src/tools/*/manifest.ts', '../../packages/tool-contract/src/index.ts'];
 
   const collect = (dir: string): string[] => {
     const names = new Set<string>();
@@ -61,7 +58,9 @@ export function convyxIcons(): Plugin {
         name.replace(/(^|-)([a-z0-9])/g, (_, __, char: string) => char.toUpperCase());
 
       const imports = names
-        .map((name) => `import { ${componentName(name)} as ${identifier(name)} } from 'lucide-react';`)
+        .map(
+          (name) => `import { ${componentName(name)} as ${identifier(name)} } from 'lucide-react';`,
+        )
         .join('\n');
 
       const entries = names.map((name) => `  '${name}': ${identifier(name)},`).join('\n');

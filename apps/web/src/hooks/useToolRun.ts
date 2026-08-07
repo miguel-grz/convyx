@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type {
-  ToolError,
-  ToolHandler,
-  ToolManifest,
-  ToolRunOutput,
-} from '@convyx/tool-contract';
+import type { ToolError, ToolHandler, ToolManifest, ToolRunOutput } from '@convyx/tool-contract';
 import { toToolError, validateSelection } from '@/lib/validation';
 
 export type RunState = 'idle' | 'running' | 'done' | 'error';

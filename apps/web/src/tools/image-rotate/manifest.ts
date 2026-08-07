@@ -6,7 +6,8 @@ const manifest: ToolManifest = {
   name: 'Rotate image',
   category: 'image',
   summary: 'Rotate or flip images.',
-  description: 'Turn in 90° steps or flip horizontally and vertically. Applies to a whole batch at once.',
+  description:
+    'Turn in 90° steps or flip horizontally and vertically. Applies to a whole batch at once.',
   icon: 'flip-horizontal',
   keywords: ['flip', 'mirror', 'turn', 'voltear'],
   processing: 'client',

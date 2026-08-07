@@ -57,13 +57,13 @@ pnpm install
 pnpm dev
 ```
 
-| Command          | What it does                                    |
-| ---------------- | ----------------------------------------------- |
-| `pnpm dev`       | Vite dev server on :5173                        |
-| `pnpm test`      | Registry invariants and tool logic              |
-| `pnpm typecheck` | App, worker and node projects                   |
-| `pnpm lint`      | ESLint                                          |
-| `pnpm build`     | Typecheck then production build                 |
+| Command          | What it does                       |
+| ---------------- | ---------------------------------- |
+| `pnpm dev`       | Vite dev server on :5173           |
+| `pnpm test`      | Registry invariants and tool logic |
+| `pnpm typecheck` | App, worker and node projects      |
+| `pnpm lint`      | ESLint                             |
+| `pnpm build`     | Typecheck then production build    |
 
 Developer docs: [architecture](docs/architecture.md) · [adding a tool](docs/adding-a-tool.md) · [design system](DESIGN.md) · [decisions](docs/adr/)
 
@@ -85,8 +85,8 @@ docs/
 
 ## Roadmap
 
-| Phase | Scope                                                             | Status |
-| ----- | ----------------------------------------------------------------- | ------ |
+| Phase | Scope                                                              | Status |
+| ----- | ------------------------------------------------------------------ | ------ |
 | 0     | Registry, contract, shell, design system, shared upload/run/result | Done   |
 | 1     | Client PDF tools — split, rotate, organize, extract, PDF↔JPG       | Next   |
 | 2     | Client image tools — convert, compress, resize, crop, rotate       |        |

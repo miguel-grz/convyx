@@ -30,7 +30,10 @@ export function StartHere() {
   return (
     <section className="border-line border-b">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <div ref={heading} className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div
+          ref={heading}
+          className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+        >
           <div className="max-w-xl">
             <h2 className="text-3xl text-balance sm:text-4xl">Start here</h2>
             <p className="text-fg-muted mt-4 text-pretty">

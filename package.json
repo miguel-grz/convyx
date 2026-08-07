@@ -2,7 +2,7 @@
   "name": "convyx",
   "version": "0.1.0",
   "private": true,
-  "description": "Convyx — a privacy-first toolkit for documents and images.",
+  "description": "Convyx \u2014 a privacy-first toolkit for documents and images.",
   "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=20"
@@ -11,6 +11,7 @@
     "dev": "pnpm --filter @convyx/web dev",
     "build": "pnpm --filter @convyx/web build",
     "preview": "pnpm --filter @convyx/web preview",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",

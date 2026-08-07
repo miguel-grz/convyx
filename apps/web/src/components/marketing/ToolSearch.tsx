@@ -112,7 +112,12 @@ export function ToolSearch({ className }: { className?: string }) {
           className="border-line bg-bg-panel shadow-float animate-[pop-in_140ms_cubic-bezier(0.16,1,0.3,1)] absolute top-full right-0 left-0 z-40 mt-2 overflow-hidden rounded-xl border p-1.5 text-left"
         >
           {matches.map((tool, index) => (
-            <li key={tool.id} id={`${listId}-${index}`} role="option" aria-selected={index === active}>
+            <li
+              key={tool.id}
+              id={`${listId}-${index}`}
+              role="option"
+              aria-selected={index === active}
+            >
               <button
                 type="button"
                 data-category={tool.category}

@@ -23,19 +23,19 @@ raw hex value.
 Dark is the default (`:root`); `.light` is a full peer, applied by an inline
 script in `index.html` before first paint so the page never flashes.
 
-| Token                     | Dark      | Light     | Use                                    |
-| ------------------------- | --------- | --------- | -------------------------------------- |
-| `--bg`                    | `#08090B` | `#FFFFFF` | Page ground                            |
-| `--bg-panel`              | `#0E1013` | `#FFFFFF` | Cards, menus, inputs                   |
-| `--bg-raised`             | `#16181D` | `#F6F7F9` | Tab tracks, hover fills, skeletons     |
-| `--fg` / `-muted`/`-subtle` | 3 steps | 3 steps   | Body, secondary, tertiary              |
-| `--line` / `--line-strong`| `#1E2027` | `#E5E8ED` | Hairlines, input and card borders      |
-| `--brand`                 | `#6E79F0` | `#4B56D8` | Primary action and focus ring only     |
-| `--ok`                    | `#2FC98A` | `#0F9D6F` | The "runs on your device" claim        |
-| `--danger`                | `#F2645A` | `#D33B32` | Errors and destructive controls        |
+| Token                       | Dark      | Light     | Use                                |
+| --------------------------- | --------- | --------- | ---------------------------------- |
+| `--bg`                      | `#08090B` | `#FFFFFF` | Page ground                        |
+| `--bg-panel`                | `#0E1013` | `#FFFFFF` | Cards, menus, inputs               |
+| `--bg-raised`               | `#16181D` | `#F6F7F9` | Tab tracks, hover fills, skeletons |
+| `--fg` / `-muted`/`-subtle` | 3 steps   | 3 steps   | Body, secondary, tertiary          |
+| `--line` / `--line-strong`  | `#1E2027` | `#E5E8ED` | Hairlines, input and card borders  |
+| `--brand`                   | `#6E79F0` | `#4B56D8` | Primary action and focus ring only |
+| `--ok`                      | `#2FC98A` | `#0F9D6F` | The "runs on your device" claim    |
+| `--danger`                  | `#F2645A` | `#D33B32` | Errors and destructive controls    |
 
 **Two colour systems, two jobs.** `--brand` marks the one action that starts the
-work; it is never decorative. Each category owns a hue used *only* on its icon
+work; it is never decorative. Each category owns a hue used _only_ on its icon
 tile and its active tab, so a grid of 26 tools is scannable by colour before a
 label is read:
 
@@ -75,7 +75,7 @@ Primitives are in `apps/web/src/components/ui/`, all styled from tokens:
 
 - **Button** — `primary` (the only filled control on a screen), `secondary`,
   `ghost`, `danger`. Disabled drops out of the brand colour entirely rather than
-  fading it, so an unavailable action never still reads as *the* action.
+  fading it, so an unavailable action never still reads as _the_ action.
 - **Badge** — `neutral`, `brand`, `ok`, `outline`. Used for "On device",
   "Server", "Soon".
 - **Accordion** — measures its content with a `ResizeObserver` and animates to a
@@ -112,14 +112,18 @@ element.
 `max-w-6xl` with `px-4 sm:px-6`; tool pages narrow to `max-w-3xl`. Sections are
 separated by a full-bleed `border-line` rule rather than by spacing alone.
 
-**The landing page carries no tool grid.** A grid of every tool belongs on
+**The landing page carries no full tool grid.** A grid of every tool belongs on
 `/tools`, where finding one is the job; on the landing page it grew with the
-catalogue and pushed the explanation below the fold. The way in from the home
-page is the hero's combobox, four quick picks, and the header's category menus.
+catalogue and pushed the explanation below the fold. The way in is the hero's
+combobox, a bounded eight-card "Start here" selection, and the header's menus.
+
+Sections run: hero → Start here → key features → three steps → privacy → FAQ.
+Access precedes argument, because a visitor who already knows what they need
+should not have to scroll past five reasons to trust us.
 
 `KeyFeatures` is a five-tile bento (`lg:grid-cols-3`, first tile spanning two)
 rather than a row of equal cards, and each tile carries a small animation that
-*illustrates* its claim: a file bouncing off the edge of the device, a retention
+_illustrates_ its claim: a file bouncing off the edge of the device, a retention
 ring unwinding, a worker's progress bar with its cancel control, a count-up of
 the catalogue size. Five claims stay five as the catalogue grows.
 

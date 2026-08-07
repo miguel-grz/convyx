@@ -84,9 +84,7 @@ export function getTool(id: string): ToolManifest | undefined {
 }
 
 /** Dynamically imports a tool's UI. Returns `null` for tools without one. */
-export function loadToolComponent(
-  id: string,
-): (() => Promise<ToolModule>) | null {
+export function loadToolComponent(id: string): (() => Promise<ToolModule>) | null {
   return componentLoaders[`./${id}/Tool.tsx`] ?? null;
 }
 
@@ -96,12 +94,12 @@ export function getToolsByCategory(category: ToolCategory): ToolManifest[] {
 
 /** Only categories that actually contain a tool are shown in the navigation. */
 export function getActiveCategories() {
-  return TOOL_CATEGORIES.filter((category) =>
-    tools.some((tool) => tool.category === category),
-  ).map((category) => ({
-    ...CATEGORY_META[category],
-    count: getToolsByCategory(category).length,
-  }));
+  return TOOL_CATEGORIES.filter((category) => tools.some((tool) => tool.category === category)).map(
+    (category) => ({
+      ...CATEGORY_META[category],
+      count: getToolsByCategory(category).length,
+    }),
+  );
 }
 
 export function getFeaturedTools(limit = 6): ToolManifest[] {

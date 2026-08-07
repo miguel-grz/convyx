@@ -222,9 +222,9 @@ function NoInstall() {
 /**
  * The catalogue as one number.
  *
- * Not a link: "Start here" sits directly below and owns the way into the
- * catalogue. Two doors to the same room, one screen apart, is a choice the
- * visitor should not have to make.
+ * Not a link: "Start here" sits above and owns the way into the catalogue. Two
+ * doors to the same room, one screen apart, is a choice the visitor should not
+ * have to make.
  */
 function CatalogTile({ delay }: { delay: number }) {
   const reveal = useReveal<HTMLDivElement>({ delay });

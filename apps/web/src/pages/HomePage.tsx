@@ -9,9 +9,13 @@ import { Faq } from '@/components/marketing/Faq';
 /**
  * The landing page explains the product; /tools is where the catalogue lives.
  *
+ * Order matters: the way to a tool comes before the argument for using them.
+ * Someone who already knows what they need should not have to scroll past five
+ * reasons to trust us, and someone who does not will read them either way.
+ *
  * It deliberately holds no full tool grid. The catalogue grew and pushed
  * everything that explains Convyx below the fold, so the way in from here is
- * the hero's search, a short "Start here" selection, and the header's menus.
+ * the hero's search and a bounded "Start here" selection.
  */
 export function HomePage() {
   usePageMeta({
@@ -23,8 +27,8 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <KeyFeatures />
       <StartHere />
+      <KeyFeatures />
       <HowItWorks />
       <PrivacyStrip />
       <Faq />

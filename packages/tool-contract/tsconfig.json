@@ -1,4 +1,10 @@
 {
   "extends": "@convyx/config/tsconfig.base.json",
+  "compilerOptions": {
+    // ToolRunInput and ToolRunOutput are typed in File, Blob and AbortSignal.
+    // The handler half of this contract only ever runs in a browser, so the DOM
+    // lib belongs here; the API mirrors these shapes in Python, not in TS.
+    "lib": ["ESNext", "DOM"]
+  },
   "include": ["src"]
 }

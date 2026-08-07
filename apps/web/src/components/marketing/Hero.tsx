@@ -24,7 +24,10 @@ export function Hero() {
         className="bg-brand/12 pointer-events-none absolute -top-40 left-1/2 size-[36rem] -translate-x-1/2 rounded-full blur-[120px]"
       />
 
-      <div ref={copy} className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
+      <div
+        ref={copy}
+        className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20"
+      >
         <h1 className="text-4xl text-balance sm:text-5xl lg:text-[3.5rem]">
           Every PDF and image tool you need
         </h1>

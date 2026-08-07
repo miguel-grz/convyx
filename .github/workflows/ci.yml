@@ -25,6 +25,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # These are the steps `pnpm verify` runs locally, kept separate here so a
+      # red build names which one failed. Keep the two in step.
       - name: Format
         run: pnpm format:check
 

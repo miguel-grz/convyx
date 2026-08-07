@@ -35,8 +35,8 @@ someone opens that tool.
 
 Everything user-facing is derived from that array:
 
-| Surface            | Derived from                                     |
-| ------------------ | ------------------------------------------------ |
+| Surface            | Derived from                                      |
+| ------------------ | ------------------------------------------------- |
 | `/tools/:toolId`   | `getTool(id)` — one route serves every tool       |
 | Category nav       | `getActiveCategories()` — categories with tools   |
 | Catalog and search | `searchTools(query)` over name, keywords, summary |
