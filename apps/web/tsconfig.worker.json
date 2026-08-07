@@ -4,7 +4,14 @@
     "lib": ["ESNext", "WebWorker"],
     "types": ["vite/client"],
     "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] }
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/worker.ts", "src/workers/expose.ts", "src/workers/protocol.ts"]
+  "include": [
+    "src/**/worker.ts",
+    "src/**/*.worker.ts",
+    "src/workers/expose.ts",
+    "src/workers/protocol.ts"
+  ]
 }

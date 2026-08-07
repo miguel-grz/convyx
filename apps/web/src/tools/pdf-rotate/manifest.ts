@@ -7,12 +7,12 @@ const manifest: ToolManifest = {
   category: 'pdf',
   summary: 'Turn pages the right way up.',
   description:
-    'Rotate every page at once or pick individual pages from the preview. The rotation is' +
-    ' written into the file, so it stays correct in every reader.',
+    'Turn every page at once, or name just the ones you want. The rotation is written' +
+    ' into the file, so it stays correct in every reader.',
   icon: 'rotate-cw',
   keywords: ['turn', 'orientation', 'landscape', 'rotar'],
   processing: 'client',
-  status: 'planned',
+  status: 'available',
   accepts: ACCEPTS.pdf,
   files: { min: 1, max: 1 },
   maxFileSizeMB: 100,
