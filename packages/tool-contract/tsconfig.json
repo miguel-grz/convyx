@@ -1,0 +1,4 @@
+{
+  "extends": "@convyx/config/tsconfig.base.json",
+  "include": ["src"]
+}
