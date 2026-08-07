@@ -118,14 +118,20 @@ export const ACCEPTS = {
     },
     label: 'image',
   },
-  /** Formats the browser can reliably decode into a canvas. */
+  /**
+   * Formats every browser we target can decode. Narrower than `image` on
+   * purpose: BMP and TIFF are common enough to accept as input to a PDF, but a
+   * browser cannot open them for editing, so a tool that redraws pixels must
+   * not let them in.
+   */
   raster: {
     mimeTypes: {
       'image/png': ['.png'],
       'image/jpeg': ['.jpg', '.jpeg'],
       'image/webp': ['.webp'],
+      'image/avif': ['.avif'],
     },
-    label: 'PNG, JPG or WEBP',
+    label: 'PNG, JPG, WEBP or AVIF',
   },
   office: {
     mimeTypes: {
