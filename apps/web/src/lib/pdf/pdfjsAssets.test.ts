@@ -18,7 +18,7 @@ const source = path.resolve(import.meta.dirname, '../..');
  * alternative needs a canvas, and the mistake being guarded is a missing
  * argument, which is exactly what reading the call site catches.
  */
-describe('pdf.js asset configuration', () => {
+describe('pdf.js worker and asset configuration', () => {
   const callSites = walk(source).filter((file) =>
     readFileSync(file, 'utf8').includes('getDocument('),
   );
@@ -37,6 +37,22 @@ describe('pdf.js asset configuration', () => {
     }
   });
 
+  /**
+   * The same shape of failure, one thread over. Leave pdf.js to start its own
+   * worker and it cannot — there is no `window` in a worker for its bootstrap to
+   * read — so it silently runs on the calling thread instead, and the only
+   * outward sign is a console warning nobody is watching for.
+   */
+  it('starts the worker itself at every one of them', () => {
+    for (const file of callSites) {
+      const text = readFileSync(file, 'utf8');
+      expect(
+        text,
+        `${path.relative(source, file)} opens a document without startPdfjsWorker`,
+      ).toContain('startPdfjsWorker');
+    }
+  });
+
   it('still finds the files pdf.js expects to fetch', () => {
     const root = path.dirname(require.resolve('pdfjs-dist/package.json'));
 
@@ -44,6 +60,22 @@ describe('pdf.js asset configuration', () => {
     // nothing and text silently disappears again.
     expect(readdirSync(path.join(root, 'standard_fonts')).length).toBeGreaterThan(10);
     expect(readdirSync(path.join(root, 'cmaps')).length).toBeGreaterThan(100);
+
+    // These pdf.js builds by name rather than by listing a directory, so a
+    // rename upstream is not a 404 anyone notices — it is a JPEG 2000 image
+    // quietly missing from a converted page. Named here for that reason.
+    const wasm = readdirSync(path.join(root, 'wasm'));
+    for (const file of [
+      'jbig2.wasm',
+      'jbig2_nowasm_fallback.js',
+      'openjpeg.wasm',
+      'openjpeg_nowasm_fallback.js',
+      'qcms_bg.wasm',
+    ]) {
+      expect(wasm, `pdfjs-dist no longer ships wasm/${file}`).toContain(file);
+    }
+
+    expect(readdirSync(path.join(root, 'iccs'))).toContain('CGATS001Compat-v2-micro.icc');
   });
 });
 

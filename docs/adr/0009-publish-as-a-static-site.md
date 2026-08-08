@@ -44,7 +44,8 @@ network tab. Widening it needs a reason worth writing down here.
   production as a flash of the wrong theme on every visit.
 - `style-src` needs `'unsafe-inline'`. React writes `style` attributes for the
   crop selection and the compress preview, and attribute styles cannot be
-  hashed. This is the one concession in the policy.
+  hashed. It was the only concession in the policy until ADR 10 added
+  `'wasm-unsafe-eval'` to `script-src`.
 - Link previews describe the site, not the page, because scrapers do not run
   JavaScript. Per-page previews need prerendering, which is not built.
 - Planned tools are left out of the sitemap. Their pages exist and say "Soon";

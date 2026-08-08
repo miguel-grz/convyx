@@ -1,10 +1,8 @@
 import * as pdfjs from 'pdfjs-dist';
-import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { ToolError } from '@convyx/tool-contract';
 import { PDFJS_ASSETS } from '@/lib/pdf/pdfjsAssets';
+import { startPdfjsWorker } from '@/lib/pdf/pdfjsWorker';
 import { expose } from '@/workers/expose';
-
-pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
 /** Wide enough to recognise a page, small enough to hold a hundred in memory. */
 const THUMBNAIL_WIDTH = 200;
@@ -41,12 +39,21 @@ expose<ThumbnailsPayload, ThumbnailsResult>(
       });
     }
 
+    // Parsing runs on a thread of its own, so a hundred-page document does not
+    // stop this one from reporting how far along it is.
+    const stopWorker = startPdfjsWorker();
     const task = pdfjs.getDocument({ data: new Uint8Array(bytes), ...PDFJS_ASSETS });
+
+    const shutDown = async () => {
+      await task.destroy();
+      stopWorker();
+    };
 
     let document;
     try {
       document = await task.promise;
     } catch (cause) {
+      await shutDown();
       const message = cause instanceof Error ? cause.message.toLowerCase() : '';
 
       if (message.includes('password')) {
@@ -97,7 +104,7 @@ expose<ThumbnailsPayload, ThumbnailsResult>(
 
       return { pages };
     } finally {
-      void task.destroy();
+      await shutDown();
     }
   },
   (result) => result.pages.map((page) => page.bytes),
