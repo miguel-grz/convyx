@@ -47,15 +47,33 @@ export interface EncodeOptions {
    * The part of the bitmap to take, in source pixels. Defaults to all of it.
    */
   source?: { x: number; y: number; width: number; height: number };
+  /**
+   * Mirrors first, then turns. A quarter turn swaps the output's sides, so the
+   * canvas is sized from the result rather than from the bitmap.
+   */
+  orientation?: { rotation: number; flipX: boolean; flipY: boolean };
 }
 
-/** Draws a bitmap and encodes it in the target format. */
+/**
+ * Draws a bitmap and encodes it in the target format.
+ *
+ * The three adjustments below — a source region, a turn, a smaller size — are
+ * deliberately separate paths rather than one general transform. No tool asks
+ * for two at once, and each has a different right answer about resampling: a
+ * crop and a quarter turn move whole pixels and must not be filtered, while a
+ * downscale has to be.
+ */
 export async function encodeImage(
   bitmap: ImageBitmap,
-  { format, quality, width, height, source }: EncodeOptions,
+  { format, quality, width, height, source, orientation }: EncodeOptions,
 ): Promise<Uint8Array<ArrayBuffer>> {
   const take = source ?? { x: 0, y: 0, width: bitmap.width, height: bitmap.height };
-  const canvas = createCanvas(width ?? take.width, height ?? take.height);
+  const turned = orientation ? Math.abs(orientation.rotation) % 180 === 90 : false;
+
+  const canvas = createCanvas(
+    width ?? (turned ? take.height : take.width),
+    height ?? (turned ? take.width : take.height),
+  );
   const context = canvas.getContext('2d');
 
   if (!context) {
@@ -73,7 +91,15 @@ export async function encodeImage(
   context.imageSmoothingEnabled = true;
   context.imageSmoothingQuality = 'high';
 
-  if (source) {
+  if (orientation) {
+    // The canvas transform stack applies in reverse, so setting the rotation
+    // before the mirror is what draws the mirror first — which is the order the
+    // orientation is defined in.
+    context.translate(canvas.width / 2, canvas.height / 2);
+    context.rotate((orientation.rotation * Math.PI) / 180);
+    context.scale(orientation.flipX ? -1 : 1, orientation.flipY ? -1 : 1);
+    context.drawImage(bitmap, -take.width / 2, -take.height / 2, take.width, take.height);
+  } else if (source) {
     // Taking a region and scaling it are separable, and no tool asks for both
     // at once. Cropping draws the pixels straight across at 1:1, where the
     // stepping below would only cost time.
