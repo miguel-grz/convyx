@@ -11,7 +11,7 @@ const manifest: ToolManifest = {
   icon: 'crop',
   keywords: ['trim', 'cut', 'aspect ratio', 'recortar'],
   processing: 'client',
-  status: 'planned',
+  status: 'available',
   accepts: ACCEPTS.raster,
   files: { min: 1, max: 1 },
   maxFileSizeMB: 50,

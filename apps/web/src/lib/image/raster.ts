@@ -40,17 +40,22 @@ export interface EncodeOptions {
   format: RasterFormat;
   /** 0..1, ignored by lossless formats. */
   quality: number;
-  /** Defaults to the bitmap's own size. */
+  /** Defaults to the source rectangle's size. */
   width?: number;
   height?: number;
+  /**
+   * The part of the bitmap to take, in source pixels. Defaults to all of it.
+   */
+  source?: { x: number; y: number; width: number; height: number };
 }
 
 /** Draws a bitmap and encodes it in the target format. */
 export async function encodeImage(
   bitmap: ImageBitmap,
-  { format, quality, width, height }: EncodeOptions,
+  { format, quality, width, height, source }: EncodeOptions,
 ): Promise<Uint8Array<ArrayBuffer>> {
-  const canvas = createCanvas(width ?? bitmap.width, height ?? bitmap.height);
+  const take = source ?? { x: 0, y: 0, width: bitmap.width, height: bitmap.height };
+  const canvas = createCanvas(width ?? take.width, height ?? take.height);
   const context = canvas.getContext('2d');
 
   if (!context) {
@@ -67,13 +72,31 @@ export async function encodeImage(
 
   context.imageSmoothingEnabled = true;
   context.imageSmoothingQuality = 'high';
-  context.drawImage(
-    halveDownTo(bitmap, canvas.width, canvas.height),
-    0,
-    0,
-    canvas.width,
-    canvas.height,
-  );
+
+  if (source) {
+    // Taking a region and scaling it are separable, and no tool asks for both
+    // at once. Cropping draws the pixels straight across at 1:1, where the
+    // stepping below would only cost time.
+    context.drawImage(
+      bitmap,
+      take.x,
+      take.y,
+      take.width,
+      take.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+  } else {
+    context.drawImage(
+      halveDownTo(bitmap, canvas.width, canvas.height),
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+  }
 
   const mimeType = FORMAT_MIME[format];
   const blob = await canvas.convertToBlob({ type: mimeType, quality });
