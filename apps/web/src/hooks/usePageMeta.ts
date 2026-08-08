@@ -15,6 +15,13 @@ export function usePageMeta({ title, description }: PageMeta): void {
   useEffect(() => {
     document.title = title;
 
+    // Every route serves the same index.html, so the canonical link ships
+    // pointing at the home page. Left alone, each tool page would tell a
+    // crawler it was a copy of the home page and ask not to be indexed on its
+    // own — the opposite of what a catalogue of 26 pages needs.
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = `${window.location.origin}${window.location.pathname}`;
+
     if (!description) return;
 
     const tag = document.querySelector<HTMLMetaElement>('meta[name="description"]');

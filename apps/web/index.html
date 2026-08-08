@@ -2,14 +2,46 @@
 <html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#050505" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="canonical" href="%SITE_URL%/" />
+
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#08090b" media="(prefers-color-scheme: dark)" />
+
     <title>Convyx — file tools that never leave your device</title>
     <meta
       name="description"
       content="Merge, split, convert and compress PDFs and images. Most tools run entirely in your browser, so your files never leave your device."
     />
+
+    <!--
+      Link previews are read by scrapers that do not run JavaScript, so these
+      describe the site rather than the page. A per-page preview needs the HTML
+      to exist before the browser does; that is prerendering, and it is not
+      built yet. Until then, every shared link previews as Convyx itself, which
+      is true of any of them.
+
+      The image is the mark, so the card is the square `summary` rather than the
+      wide one. A wide card wants artwork made for it, and an invented one
+      stretched to fit reads worse than no card at all.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Convyx" />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:title" content="Convyx — file tools that never leave your device" />
+    <meta
+      property="og:description"
+      content="Merge, split, convert and compress PDFs and images. Most tools run entirely in your browser, so your files never leave your device."
+    />
+    <meta property="og:image" content="%SITE_URL%/icon-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="The Convyx mark" />
+    <meta name="twitter:card" content="summary" />
+
     <script>
       // Applied before paint so the page never flashes the wrong theme.
       (() => {
@@ -22,23 +54,6 @@
     </script>
   </head>
   <body class="h-full">
-    <!--
-      THESIS: A tool site you already know how to use. The catalogue is the interface: search it,
-      scan it by coloured category icon, click the one you need. Refuses the metaphor-led concept
-      page — twice rejected here — and refuses the undifferentiated template by finishing it properly.
-      OWN-WORLD: Near-black #08090B ground with #0E1013 panels and 1px #1E2027 hairlines. Inter
-      throughout, tight optical sizing. One indigo #6E79F0 for actions and focus; each category owns a
-      hue (PDF rose, Image teal) carried only by its icon tile and its active tab, so the grid is
-      scannable by colour. Rounded 10-12px, soft single-source shadows, no gradient text, no glass.
-      STORY: A visitor sees the tool they came for within one screen, learns their file is not
-      uploaded, and starts the job.
-      FIRST VIEWPORT: Plain headline, one sentence, a live tool search that filters the real registry,
-      four quick-start tools, and the working Merge PDF dropzone beside it.
-      FORM: Category convention at full craft. Chosen by the user over the roll, with iLovePDF and
-      Smallpdf setting structure and Linear and Vercel setting finish. Seed key 27e0f7d8, canon exit.
-      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the
-      verdict, and DESIGN.md
-    -->
     <div id="root" class="h-full"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
