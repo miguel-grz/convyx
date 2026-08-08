@@ -7,8 +7,8 @@ const manifest: ToolManifest = {
   category: 'image',
   summary: 'Change dimensions by pixels or percentage.',
   description:
-    'Resize one image or a whole batch, with the aspect ratio locked by default. Downscaling' +
-    ' is done in steps to avoid the mush you get from a single big jump.',
+    'Resize one image or a whole batch, with the aspect ratio locked by default. Give a width,' +
+    ' a height or both, and every image fits inside it without being stretched.',
   icon: 'scaling',
   keywords: ['scale', 'dimensions', 'width', 'redimensionar'],
   processing: 'client',

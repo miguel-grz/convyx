@@ -190,11 +190,16 @@ export async function requireEncoder(format: RasterFormat): Promise<void> {
 /**
  * Shrinks in halving steps until one more would overshoot.
  *
- * A canvas samples a small neighbourhood, so scaling a 4000px image to 400px in
- * one draw throws away nine of every ten pixels without ever looking at them —
- * the result is the mush you see on sites that resize this way. Halving reads
- * every pixel on the way down. Anything above half size is left alone, because
- * a single draw is already reading enough of the source to be right.
+ * This is insurance, not the thing carrying the quality. Measured in Chromium
+ * on a 2400px source of 1px stripes taken to 240px, stepped and single-draw
+ * were indistinguishable — both 0.37 neighbour-to-neighbour jitter, with the
+ * stepped version matching the source's mean brightness exactly. The engine's
+ * own filter is already reading the whole source. The steps are here for
+ * engines whose single big jump is worse, and they cost a few intermediate
+ * canvases only when shrinking past half size.
+ *
+ * Do not lean on this to justify a quality claim in product copy, and do not
+ * delete it on the strength of one engine measuring flat.
  */
 function halveDownTo(
   bitmap: ImageBitmap,
