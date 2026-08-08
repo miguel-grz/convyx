@@ -52,12 +52,28 @@ export interface EncodeOptions {
    * canvas is sized from the result rather than from the bitmap.
    */
   orientation?: { rotation: number; flipX: boolean; flipY: boolean };
+  /**
+   * Drawn on top of the result, in the output's own pixels. Unlike the three
+   * above this one composes rather than competes: it is not another way to draw
+   * the source, it is something added after whichever way was used.
+   */
+  stamps?: Stamp[];
+}
+
+export interface Stamp {
+  image: CanvasImageSource;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  /** 0..1. */
+  opacity: number;
 }
 
 /**
  * Draws a bitmap and encodes it in the target format.
  *
- * The three adjustments below — a source region, a turn, a smaller size — are
+ * The three source adjustments — a region, a turn, a smaller size — are
  * deliberately separate paths rather than one general transform. No tool asks
  * for two at once, and each has a different right answer about resampling: a
  * crop and a quarter turn move whole pixels and must not be filtered, while a
@@ -65,7 +81,7 @@ export interface EncodeOptions {
  */
 export async function encodeImage(
   bitmap: ImageBitmap,
-  { format, quality, width, height, source, orientation }: EncodeOptions,
+  { format, quality, width, height, source, orientation, stamps }: EncodeOptions,
 ): Promise<Uint8Array<ArrayBuffer>> {
   const take = source ?? { x: 0, y: 0, width: bitmap.width, height: bitmap.height };
   const turned = orientation ? Math.abs(orientation.rotation) % 180 === 90 : false;
@@ -123,6 +139,16 @@ export async function encodeImage(
       canvas.height,
     );
   }
+
+  for (const stamp of stamps ?? []) {
+    // Reset first: an orientation left a transform on the stack, and a stamp is
+    // positioned in the output's pixels, not the source's.
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.globalAlpha = Math.min(Math.max(stamp.opacity, 0), 1);
+    context.drawImage(stamp.image, stamp.x, stamp.y, stamp.width, stamp.height);
+  }
+
+  context.globalAlpha = 1;
 
   const mimeType = FORMAT_MIME[format];
   const blob = await canvas.convertToBlob({ type: mimeType, quality });
