@@ -28,8 +28,9 @@ expose<ConvertPayload, ConvertResult>(
         report,
       );
     } finally {
-      // pdf.js holds the parsed document and its worker until told otherwise.
-      target.destroy();
+      // pdf.js holds the parsed document and its worker until told otherwise,
+      // and the thread outlives the document, so this is awaited in order.
+      await target.destroy();
     }
   },
   (result) => [result.bytes],

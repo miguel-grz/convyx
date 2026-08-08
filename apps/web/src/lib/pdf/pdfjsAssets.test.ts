@@ -18,7 +18,7 @@ const source = path.resolve(import.meta.dirname, '../..');
  * alternative needs a canvas, and the mistake being guarded is a missing
  * argument, which is exactly what reading the call site catches.
  */
-describe('pdf.js asset configuration', () => {
+describe('pdf.js worker and asset configuration', () => {
   const callSites = walk(source).filter((file) =>
     readFileSync(file, 'utf8').includes('getDocument('),
   );
@@ -34,6 +34,22 @@ describe('pdf.js asset configuration', () => {
         text,
         `${path.relative(source, file)} opens a document without PDFJS_ASSETS`,
       ).toContain('PDFJS_ASSETS');
+    }
+  });
+
+  /**
+   * The same shape of failure, one thread over. Leave pdf.js to start its own
+   * worker and it cannot — there is no `window` in a worker for its bootstrap to
+   * read — so it silently runs on the calling thread instead, and the only
+   * outward sign is a console warning nobody is watching for.
+   */
+  it('starts the worker itself at every one of them', () => {
+    for (const file of callSites) {
+      const text = readFileSync(file, 'utf8');
+      expect(
+        text,
+        `${path.relative(source, file)} opens a document without startPdfjsWorker`,
+      ).toContain('startPdfjsWorker');
     }
   });
 

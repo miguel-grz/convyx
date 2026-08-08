@@ -1,20 +1,15 @@
 import * as pdfjs from 'pdfjs-dist';
-import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { ToolError } from '@convyx/tool-contract';
 import { PDFJS_ASSETS } from '@/lib/pdf/pdfjsAssets';
+import { startPdfjsWorker } from '@/lib/pdf/pdfjsWorker';
 import type { PageRenderer } from './convert';
-
-// pdf.js parses and rasterises in a worker of its own. We are already inside
-// one, so this is a nested worker — supported everywhere we target, and worth
-// it: parsing a large document would otherwise block our own progress reports.
-pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
 export type ImageFormat = 'jpg' | 'png';
 
 export interface RenderTarget {
   pageCount: number;
   render: PageRenderer;
-  destroy: () => void;
+  destroy: () => Promise<void>;
 }
 
 /**
@@ -35,14 +30,25 @@ export async function openForRender(
     });
   }
 
-  // The loading task owns the pdf.js worker; the document proxy does not. Only
-  // the task can shut it down, so it has to outlive the await.
+  // pdf.js parses and rasterises on a thread of its own. We are already inside
+  // one, so this is a nested worker — supported everywhere we target, and worth
+  // it: parsing a large document would otherwise block our own progress reports.
+  const stopWorker = startPdfjsWorker();
+
+  // The loading task owns pdf.js's end of that thread; the document proxy does
+  // not. Only the task can shut it down, so it has to outlive the await.
   const task = pdfjs.getDocument({ data: new Uint8Array(bytes), ...PDFJS_ASSETS });
+
+  const shutDown = async () => {
+    await task.destroy();
+    stopWorker();
+  };
 
   let document;
   try {
     document = await task.promise;
   } catch (cause) {
+    await shutDown();
     const message = cause instanceof Error ? cause.message.toLowerCase() : '';
 
     if (message.includes('password')) {
@@ -90,6 +96,6 @@ export async function openForRender(
   return {
     pageCount: document.numPages,
     render,
-    destroy: () => void task.destroy(),
+    destroy: shutDown,
   };
 }
