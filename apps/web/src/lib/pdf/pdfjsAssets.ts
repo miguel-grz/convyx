@@ -1,5 +1,6 @@
 /**
- * Where pdf.js should fetch its font and character-map data.
+ * Where pdf.js should fetch the data it does not carry in its bundle: fonts,
+ * character maps, image decoders and a colour profile.
  *
  * Without these, a PDF that uses a standard font without embedding it renders
  * every glyph as an empty box — the page layout, images and colours all come
@@ -17,6 +18,24 @@ export const PDFJS_ASSETS = {
   cMapPacked: true,
 
   /**
+   * The decoders for the two image formats a browser cannot read, and the
+   * profile that turns print colour into screen colour.
+   *
+   * JPEG 2000 and JBIG2 are not web image formats — nothing on the platform
+   * decodes them — so pdf.js ships its own decoders as WebAssembly and fetches
+   * them from `wasmUrl`. Leave it unset and those images are simply dropped:
+   * a scanned page comes out blank, with the text and rules around it perfectly
+   * intact, which is the same shape of failure as the missing fonts above.
+   * `iccUrl` is the CMYK profile that ICC-based colour converts against.
+   *
+   * These are why the content policy names `'wasm-unsafe-eval'`. That was a
+   * deliberate widening of a deliberately narrow policy — the reasoning is in
+   * `vite/headers-plugin.ts`, argued at length in ADR 10.
+   */
+  wasmUrl: `${base}pdfjs/wasm/`,
+  iccUrl: `${base}pdfjs/iccs/`,
+
+  /**
    * Fetch that data from pdf.js's own worker, not from the thread that asked.
    *
    * The other path fetches on the calling thread, and the check it makes first —
@@ -25,24 +44,12 @@ export const PDFJS_ASSETS = {
    * every asset is reported as "Unable to load font data at", naming a URL that
    * was correct all along.
    *
-   * pdf.js will choose this path by itself, but only when a `wasmUrl` is
-   * configured as well, and the test it uses to decide reads `document.baseURI`
-   * too. Both of those make it something to state rather than leave inferred.
+   * pdf.js would now pick this path by itself — it wants a `wasmUrl`, and there
+   * is one above — except that the test it uses to decide reads
+   * `document.baseURI` as well, and throws on that read before it can reach a
+   * conclusion. Stating the answer is what stops the question being asked.
    */
   useWorkerFetch: true,
-
-  /**
-   * The WebAssembly decoders are not served, so do not let pdf.js reach for
-   * them.
-   *
-   * `useWorkerFetch` is what switches them on upstream, and they need two things
-   * this build does not have: the `wasm` directory alongside the fonts and CMaps
-   * above, and `'wasm-unsafe-eval'` in a content policy that is deliberately
-   * narrow. Saying no here keeps that decision explicit — and keeps pdf.js from
-   * announcing the absence on the console for every document that has an ICC
-   * colour space. JPEG 2000 and JBIG2 images already do not decode without it.
-   */
-  useWasm: false,
 
   /**
    * Draw glyph outlines instead of installing the fonts and letting the

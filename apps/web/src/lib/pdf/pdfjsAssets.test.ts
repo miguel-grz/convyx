@@ -60,6 +60,22 @@ describe('pdf.js worker and asset configuration', () => {
     // nothing and text silently disappears again.
     expect(readdirSync(path.join(root, 'standard_fonts')).length).toBeGreaterThan(10);
     expect(readdirSync(path.join(root, 'cmaps')).length).toBeGreaterThan(100);
+
+    // These pdf.js builds by name rather than by listing a directory, so a
+    // rename upstream is not a 404 anyone notices — it is a JPEG 2000 image
+    // quietly missing from a converted page. Named here for that reason.
+    const wasm = readdirSync(path.join(root, 'wasm'));
+    for (const file of [
+      'jbig2.wasm',
+      'jbig2_nowasm_fallback.js',
+      'openjpeg.wasm',
+      'openjpeg_nowasm_fallback.js',
+      'qcms_bg.wasm',
+    ]) {
+      expect(wasm, `pdfjs-dist no longer ships wasm/${file}`).toContain(file);
+    }
+
+    expect(readdirSync(path.join(root, 'iccs'))).toContain('CGATS001Compat-v2-micro.icc');
   });
 });
 

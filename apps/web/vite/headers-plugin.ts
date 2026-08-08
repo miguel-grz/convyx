@@ -50,7 +50,14 @@ export function convyxHeaders(): Plugin {
 
       const policy = [
         "default-src 'self'",
-        `script-src 'self' ${hashes.join(' ')}`.trim(),
+        // `'wasm-unsafe-eval'` is what lets pdf.js compile the decoders for
+        // JPEG 2000, JBIG2 and ICC colour — formats no browser reads, whose
+        // images are otherwise dropped from the page. It permits WebAssembly
+        // and nothing else: not `eval`, not a new script source. WebAssembly
+        // has no way to reach the network by itself, so `connect-src` below is
+        // still the whole of what decides whether a file can leave, and that
+        // is the promise this policy is here to keep. ADR 10 argues it out.
+        `script-src 'self' 'wasm-unsafe-eval' ${hashes.join(' ')}`.trim(),
         // Element styles come from built files; the `style` attributes React
         // writes for previews and selections cannot be hashed.
         "style-src 'self' 'unsafe-inline'",
