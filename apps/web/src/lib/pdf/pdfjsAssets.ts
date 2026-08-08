@@ -17,6 +17,34 @@ export const PDFJS_ASSETS = {
   cMapPacked: true,
 
   /**
+   * Fetch that data from pdf.js's own worker, not from the thread that asked.
+   *
+   * The other path fetches on the calling thread, and the check it makes first —
+   * is this URL one `fetch` can take — reads `document.baseURI`. There is no
+   * `document` in a worker, so the read throws before any request is made and
+   * every asset is reported as "Unable to load font data at", naming a URL that
+   * was correct all along.
+   *
+   * pdf.js will choose this path by itself, but only when a `wasmUrl` is
+   * configured as well, and the test it uses to decide reads `document.baseURI`
+   * too. Both of those make it something to state rather than leave inferred.
+   */
+  useWorkerFetch: true,
+
+  /**
+   * The WebAssembly decoders are not served, so do not let pdf.js reach for
+   * them.
+   *
+   * `useWorkerFetch` is what switches them on upstream, and they need two things
+   * this build does not have: the `wasm` directory alongside the fonts and CMaps
+   * above, and `'wasm-unsafe-eval'` in a content policy that is deliberately
+   * narrow. Saying no here keeps that decision explicit — and keeps pdf.js from
+   * announcing the absence on the console for every document that has an ICC
+   * colour space. JPEG 2000 and JBIG2 images already do not decode without it.
+   */
+  useWasm: false,
+
+  /**
    * Draw glyph outlines instead of installing the fonts and letting the
    * browser's text engine do it.
    *
